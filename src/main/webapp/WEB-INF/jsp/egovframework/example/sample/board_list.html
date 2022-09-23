@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="utf-8">
+    <title>KartRace</title>
+    <link rel="icon" type="image/logo" href="./images/brand.gif">
+    <link rel="stylesheet" type="text/css" href="./css/header.css" />
+    <link rel="stylesheet" type="text/css" href="./css/home_boardList.css" />
+    <link rel="stylesheet" type="text/css" href="./css/footer.css" />
+
+    <!-- 제이쿼리 최신버전 불러오기 -->
+    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+
+    <!-- 스크립트 코드를 사용하기 위한 태그 -->
+    <script>
+
+        // IIFE(Immediately-invoked function expression: 즉시 작동하는 함수식
+        $(function () {
+            //console.log(window.onload);
+            $("#page_footer").load("/kartRace/footer.do");
+            $("#page_header").load("/kartRace/header.do");
+            boardList();
+        });
+        // 페이지 헤더랑 풋터 보드리스트를 페이지 로드 될때 바로 나타냅니다.
+
+
+        // 보드 리스트 함수
+        function boardList(cur_num) {
+
+            console.log("boardList");
+            console.log("cur_num: " + cur_num);
+
+            // 해당 하는 태그들을 지워준다.
+            $(".pagination li").remove();
+            $(".table tbody tr").remove();
+            $(".pagination").text("");
+
+            // 변수 보드리스트에 로컬스토리지에 boardList의 값을 지정한다.
+            let boardList = localStorage.getItem("boardList");
+            console.log("boardList: ", boardList);
+
+            // 쿼리문 시작
+            // 없거나 정의되지 않거나 공백이 있지 않다면
+            if (boardList !== null && boardList !== undefined && boardList !== "") {
+                // JSON 형식의 값을 객체로 변환해준다.
+                let boardParse = JSON.parse(boardList);
+                console.log("boardParse: ", boardParse);
+
+                // totalRowCount 변수에 boardList게시물을 JSON 으로 변환한 길이를 넣어준다.
+                // 변환된 값의 길이를 totalRowCount 변수에 지정한다.
+                let totalRowCount = boardParse.length;
+                console.log("totalRowCount", totalRowCount);
+                let rowSizePerPage = 10;
+                // totalPageCount 변수에 총게시물 나머지 한페이지에 나오는 게시물 + 1 을해서 다음페이지가 나타나게 해준다.
+                // Math.foor = 소수점 이하를 반올림한다.
+                let totalPageCount = Math.floor((totalRowCount - 1) / rowSizePerPage) + 1;
+                let curPage;
+                if (cur_num !== null && cur_num !== undefined && cur_num != 0) {
+                    curPage = cur_num;
+                } else {
+                    curPage = 1;
+                }
+                // firstRow = 첫번째 게시물
+                firstRow = (curPage - 1) * rowSizePerPage + 1;
+                // lastRow = 마지막 게시물
+                lastRow = firstRow + rowSizePerPage - 1;
+
+                if (lastRow > totalRowCount) lastRow = totalRowCount;
+                let pageSize = 10;
+                if (totalRowCount < 10) pageSize = totalRowCount;
+                let firstPage = Math.floor((curPage - 1) / pageSize) * pageSize + 1;
+                let lastPage = firstPage + pageSize - 1;
+                if (totalRowCount < lastPage) lastPage = totalRowCount;
+                console.log("pageSize : " + pageSize);
+                console.log("lastPage : " + lastPage);
+                console.log("firstPage : " + firstPage);
+
+                let paging_output = "";
+                // 변수에 태그들의 속성 클릭 이벤트 내용을 넣어준다.
+                paging_output += "<li><a href='#' onclick='boardList(" + 1 + ")'><span aria-hidden='true'>&laquo;</span></a></li>";
+
+                // 현재 페이지가 1이 아니라면
+                if (curPage != 1) {
+                    // 앞쪽으로 갈수 있는 페이징 클릭 이벤트 태그를 넣어준다.
+                    paging_output += "<li><a href='#' onclick='boardList(" + (curPage - 1) + ")'><span aria-hidden='true'>&lt;</span></a></li>";
+                }
+
+                // 현재 페이지가 마지막 페이지와 작거나 같을때
+                for (let i = firstPage; i <= lastPage; i++) {
+                    if (curPage != i) {
+                        // 값이 다르다면 클릭 이벤트 태그들의 속성을 넣어준다.
+                        paging_output += "<li><a href='#' onclick='boardList(" + i + ")'>" + i + "</a></li>";
+                    } else {
+                        // 값이 같다면 style 태그를 사용하여 파란색으로 바꿔준다.
+                        paging_output += "<li><a href='#' class='cur_Page' style='color: blue;'>" + i + "</a></li>";
+                    }
+                }
+                // 현재페이지가 총게시물수와 같지 않다면
+                if (curPage != totalRowCount) {
+                    // 뒤쪽 페이지로 갈수 있도록 페이징 클릭 이벤트 태그를 넣어준다.
+                    paging_output += "<li><a href='#' class='button_side' onclick='boardList(" + (curPage + 1) + ")'>&gt;</a></li>";
+                }
+                // 마지막 페이지로 갈수 있도록 페이징 클릭 이벤트 태그를 넣어준다.
+                paging_output += "<li><a href='#' class='button_side' onclick='boardList(" + totalRowCount + ")'>&gt;&gt;</a></li>";
+                // =--------------------------------------------------------------------
+                // div class pagination에 삽입해준다.  
+                $(".pagination").append(paging_output);
+
+                let output = "";
+                // boardParse에 있는 값을 뒤집어서 반복한 후 
+                boardParse.reverse().forEach(function (element, index) {
+                    // 첫번째게시물이 인덱스+1 의 값과 작거나 같거나 또한 인덱스+1 의 값이 마지막 게시물보다 작거나 같을때
+                    if (firstRow <= index + 1 && index + 1 <= lastRow) {
+                        // tr 태그 시작
+                        output += "<tr>";
+                        // 글 번호    
+                        output += "<th>" + (totalRowCount - index) + "</th>";
+                        // 말 머리
+                        output += "<td>" + element.notice_subject + "</td>";
+                        // 글 작성자
+                        output += "<td>" + element.mem_id + "</td>";
+                        //  제목
+                        output += "<td><a href='#' onclick=fn_title(" + element.write_num + ")>" + element.notice_title + "</a></td>";
+                        // 내용
+                        output += "<td>" + element.notice_content + "</td>";
+                        // 글 작성일
+                        output += "<td>" + element.write_date + "</td>";
+                        // tr 태그 종료
+                        output += "</tr>";
+                    }
+
+                });
+                // 테이블 tbody 부분에 삽입한다.
+                $(".table > tbody").append(output);
+                // 쿼리문 종료	
+            }
+        } // 보드 리스트 함수 끝
+
+        // 글 제목 누르면 페이지로 갈수 있게 세팅
+        function fn_title(temp_write_num) {
+            console.log("fn_title_temp_write_num : " + temp_write_num);
+            // 세션스토리지에 글번호를 넣어준다.
+            sessionStorage.setItem("temp_write_num", temp_write_num);
+            // 글쓰기로 갈수있는 속성 
+            location.href = "/kartRace/board_write.do";
+        } // 함수 끝
+
+        // 글작성 함수
+        function board_write() {
+            console.log("board_write");
+            // 세션스토리지에 글번호를 지워준다.
+            sessionStorage.removeItem("temp_write_num");
+            location.href = "/kartRace/board_write.do"
+        } // 글작성 함수 끝
+    </script>
+
+</head>
+
+<body>
+    <div id="wrap">
+        <!-- header 페이지 호출 -->
+        <header id="page_header">
+        </header>
+        <!-- header 페이지 E -->
+
+        <!-- nav S -->
+        <div class="intro_bg">
+            <div class="intro_text">
+                <!-- nav E -->
+            </div>
+        </div>
+        <!-- intro_bg e -->
+
+        <div class="contents">
+            <div class="content01">
+                <div class="content01_h1">
+                    <h1>공지사항</h1>
+                </div>
+
+                <!-- 리스트 -->
+                <div id="div_table">
+                    <table class="table">
+                        <!-- 서식지정을 위해 열을 그룹으로 묶어줍니다. -->
+                        <colgroup>
+                            <!-- 컬럼의 길이를 지정해줍니다. -->
+                            <col width:40>
+                            <col>
+                            <col width:180>
+                            <col width:300>
+                            <col width:300>
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>말머리</th>
+                                <th>작성자</th>
+                                <th>제목</th>
+                                <th>내용</th>
+                                <th>작성일자</th>
+                            </tr>
+                        </thead>
+                        <!-- 게시글 영역 -->
+                        <tbody>
+
+
+                        </tbody>
+                        <!-- 게시글 영역 종료 -->
+                    </table>
+                    <nav class="text-center">
+                        <ul class="pagination">
+
+                        </ul>
+                    </nav>
+                </div>
+                <!-- paging -->
+
+                <div class="div_board_write">
+                    <input type="button" value="글쓰기" onclick="board_write()">
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!-- contents e -->
+
+    <footer id="page_footer">
+        <!-- footer -->
+    </footer>
+
+    </div>
+</body>
+
+</html>

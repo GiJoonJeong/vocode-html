@@ -1,0 +1,404 @@
+*{
+    font-family: 'Noto Sans KR' , sans-serif;
+    list-style: none;
+    text-decoration: none;
+    margin: 0 auto;
+    padding: 0;
+    color: black;
+}
+.intro{
+    width:100%;
+    height: 100px;
+    /* background-color: lightblue;
+    background-color: red;*/
+}
+.header{
+    width: 100%;
+    height: 400px;
+    background-color: black;
+    display: flex;
+}
+.logoimg > img {
+    width: 100px;
+    height: 100px;
+    padding-bottom: 50px;
+    margin-left: 20px;
+     position: relative;
+    z-index: -2; 
+}
+.logoimg{
+    /* text-align: left; */
+    float: left;
+    /* width: 300px; */
+    /* height: 300px; */
+}
+.nav{
+    /* float: left; */
+    display: flex;
+    padding-top: 30px;
+    /* padding-left: 10px; */
+} 
+.nav > li {
+    margin-left: 50px;
+}
+.nav > li > a {
+    color: lightgray;
+    font-weight: bold;
+    font-size: 30px;
+}
+.nav a:hover{
+    color : mediumblue; 
+}
+.nav li ul{
+    text-align: center;
+    display: none;
+    background: linear-gradient(
+        to bottom,
+        white,
+        white
+    );
+    border-radius: 20px;
+}
+.nav li:hover ul{
+    display: block;
+    animation: slidedown .3s linear;
+    animation-fill-mode: both;
+}
+@keyframes slidedown{
+    from{
+        opacity: 0;
+    }
+    to{
+        opacity: 1;
+    }
+}
+.nav a{
+    color: lightgray;
+    font-size: 20px;
+    margin-top: 5px;
+    font-weight: bold;
+}
+.login > li > a {
+    color: lightgray;
+    font-weight: bold;
+    font-size: 30px;
+}
+.join > li > a {
+    color: lightgray;
+    font-weight: bold;
+    font-size: 30px;
+}
+
+.intro{ 
+    background-color: transparent;
+}
+#roll{
+   background-color: red;
+   margin-top: 30px;
+   background-size: 100% 600px; 
+}
+#roll{
+    background-image: url("../images/5.jpg");
+    background-size: 100% 800px; 
+ }
+
+#roll{
+    width: 100%;
+    height: 800px;
+    /* background-color: tomato; */
+    display: flex;
+    position: relative;
+    z-index: -1;
+    top: -50px;
+    background-size: 100% 800px;
+}
+
+/* header end */
+
+.sub_title{
+    width:1280px;
+    height: 100px;
+    background-color: lightskyblue;
+    display: flex;
+    position: relative;
+    top: -100px;
+    border-radius: 10px;
+}
+.sub_title > li > div > a{
+    /* background-color: yellow; */
+    height: 100%;
+    margin-left : 10px;
+    margin-right : 20px;
+    text-align: center;
+    cursor: pointer;
+}
+.icon_img > a > img{
+    width: 100%;
+    height: 90%;
+    margin-left: -30px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    cursor: pointer;
+}
+.sub_title > li{
+    display: flex;
+}
+.contents1_bold > p , .contents1_bold > a{
+	margin-right: 30px;
+	padding-top: 5px;
+}
+.howtousekart{
+    position: relative;
+    width: 1800px;
+    height: 500px;
+    background-color: black;
+    border-radius: 10px;
+    top: -30px;
+    padding-left: 120px;
+    padding-top: 50px;
+    
+}
+.howtouse{
+    /* display: inline-block; */
+    text-align: center;
+    margin-bottom: 50px;
+    color: white;
+    font-weight: bold;
+}
+.howtouse > li > div > iframe{
+    width:100%;
+    height:95%;
+}
+/* --------------------------- */
+
+.noticetext{
+    width: 1800px; 
+    height: 700px;
+    display: flex;
+    background-color: white;
+    border-radius: 5px;
+}
+
+.notice{
+    width:500px;
+    height: 500px;
+    margin-left: -30px;
+}
+.notice > div > img{
+    position: relative;
+}
+.notice0{
+    width: 1300px;
+    height: 700px;
+    display: flex;
+}
+.notice > h1{
+    padding-left: 180px;
+}
+.notice > div > li{
+    position: relative;
+    padding-left: 180px;
+}
+.notice > div> li{
+    position: relative;
+    padding-left: 200px;
+}
+.notice0 > div > h1{
+    padding-bottom: 80px;   
+}
+.notice > li > a{
+    cursor: pointer;
+}
+.notice0 > div > br {
+    font-size: 50px;
+}
+/* 반응형 */
+
+/*화면 너비가 0부터 1220px 일때  */
+@media(max-width:1220px){
+    #wrap{width: 95%;}
+
+    .header{
+        width: 100%;
+    }
+    .nav > li {
+        margin-left: 30px;
+    }
+    .sub_title{
+        width: 95%;
+        background-color: lightskyblue;
+    }
+    .howtousekart{
+        width: 90%;
+        height: 500px;
+    }
+    .howtousekart > h1{
+        margin-top: -50px;
+    }
+    .youtube{
+        display: flex;
+        margin-left: -119.5px;
+    }
+    .noticetext{
+        width:95%;
+    }
+    .notice{
+        margin-left: -100px;
+    }
+    .notice0 > div > p{
+        position: relative;
+        width: 300px;
+        padding-right: 50px;
+    }
+}
+/* ---------------------- */
+#menuicon,
+.header_icon {
+  display: none;
+}
+
+  /* 화면 너비가 0부터 930일 때 */
+ 
+  @media (max-width: 930px) {
+    .nav {
+      display: none;
+    }
+    input[id="menuicon"] + label {
+      display: block;
+      width: 30px;
+      height: 20px;
+      background-color: red;
+      position: fixed;
+      right: 30px;
+      top: 25px;
+      cursor: pointer;
+    }
+    input[id="menuicon"] + label > span {
+      display: block;
+      width: 100%;
+      height: 4px;
+      background-color: black;
+    }
+    input[id="menuicon"] + label span:nth-child(1) {
+      position: absolute;
+      top: 0;
+    }
+    input[id="menuicon"] + label span:nth-child(2) {
+      position: absolute;
+      top: calc(50% - 2px);
+    }
+    input[id="menuicon"] + label span:nth-child(3) {
+      position: absolute;
+      bottom: 0;
+    }
+  
+    /* 클릭이 되었을 때 X표시 변경,
+    label에 input 태그를 걸었기 때문에 라벨을 클릭하면 
+    input 태그의 checkbox가 체크 됩니다. 따라서 input 태그가
+    체크된 상황이라면 라벨 태그 하위에 
+    span태그에 애니메이션을 주려고 합니다.
+    */
+    input[id="menuicon"]:checked + label span:nth-child(1) {
+      top: 50%;
+      transform: rotate(45deg);
+    }
+    input[id="menuicon"]:checked + label span:nth-child(2) {
+      opacity: 0;
+    }
+    input[id="menuicon"]:checked + label span:nth-child(3) {
+      top: 50%;
+      transform: rotate(-45deg);
+    }
+    .header_icon {
+      display: block;
+    }
+  
+    .header_icon {
+      width: 300px;
+      height: 100%;
+      background-color: #222;
+      position: fixed;
+      right: -300px !important;
+      z-index: 1;
+    }
+    /* x를 만들면 우측 nav 창이 나오도록 처리 */
+    input[id="menuicon"]:checked + label + div {
+      right: 0px !important;
+    }
+    input[id="menuicon"] + label {
+      z-index: 2;
+      background-color: transparent;
+    }
+    input[id="menuicon"] + label span {
+      border-radius: 30px;
+      transition: all 0.3s;
+    }
+    .header_icon {
+      transition: all 0.3s;
+    }
+    .menu {
+      width: 200px;
+      height: 500px;
+      background-color: aliceblue;
+      margin: 100px auto;
+    }
+    .menu > li {
+      padding-top: 20px;
+      padding-left: 40px;
+    }
+    .menu > li > a {
+      color: white;
+    }
+    .menu {
+      background-color: transparent;
+    }
+    .howtousekart {
+      width: 85%;
+      height: 1000px;
+      
+    }
+    .howtouse{
+      /* text-align: center; */
+      margin-left: -100px ;
+      margin-bottom: -1px;
+    }
+    .youtube{
+    display: inline-block;
+    text-align: center;
+  }
+  .noticetext{
+    width:90%;
+    height: 1100px;
+  }
+  .notice0{
+    display: inline-block;
+    top: 250px;
+  }
+  .notice0 > div > h1{
+    position: relative;
+    margin-bottom: -50px;
+  }
+}
+
+/* 화면 너비가 0부터 550px */
+@media (max-width: 550px) {
+.sub_title > li{
+  display: inline-block;
+}
+.youtube{
+  width:80%;
+  height: 80%;
+}
+.noticetext{
+  width:90%;
+  height: 1600px;
+}
+.noticetext{
+  display: block;
+  /* top: 250px; */
+}
+.notice0{
+  width:95%;
+  margin-top: 100px;
+}
+}

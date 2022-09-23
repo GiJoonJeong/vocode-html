@@ -1,0 +1,98 @@
+<!-- header 페이지를 각페이지에 넣기 위해서 header 페이지 따로 분류 -->
+
+<script>
+// 로그인 li 태그 삭제
+$('.login li').remove();
+// 변수 mem_id 에 sessionStorage에 있는 mem_id 지정
+let mem_id = sessionStorage.getItem("mem_id");
+console.log(mem_id);
+// mem_id 가 없거나 정의되지 않거나 빈값일때
+if(mem_id === null || mem_id === undefined || mem_id === ("")){
+	// div class login에 li 태그 속성을 넣어줍니다.
+	$('.login').append("<li><a href='./login.do'>로그인</a></li>");
+}else{
+	// mem_id 가 있거나 정의되지 있거나 빈값이 아닐때
+	// div class login 위치에 로그아웃 li 태그 속성을 넣어줍니다.
+	$('.login').append("<li><a href='javascript:fn_logout()'>로그아웃</a></li>");
+    }
+
+// 회원가입 li 태그 삭제
+$('.join li').remove();
+// 만약 로그인 되어있지 않는 상태라면
+if(mem_id === null || mem_id === undefined || mem_id === ("")){
+	// 회원가입 li 태그를 넣어줍니다.
+	$('.join').append("<li><a href='./join.do'>회원가입</a></li>");
+	// 로그인 되어있는 상태라면 
+}else{
+	// 회원정보수정 li 태그를 넣어줍니다.
+	$('.join').append("<li><a href='./update.do'>회원정보수정</a></li>");
+    }
+
+
+// 페이지가 로드 되었을때 함수 실행
+$(function(){
+	// 세션에서 mem_id 값을 받아옵니다.
+	let check_login = sessionStorage.getItem("mem_id");
+	// 값이 없거나 정의되지 않거나 빈값일때
+	if(check_login === null || check_login === undefined || check_login ===""){
+	// 알림	
+		alert("로그인을 하셔야 이용 가능합니다.");
+	// 로그인페이지로 이동되게 설정합니다.	
+		location.href="/kartRace/login.do";
+	}
+});
+// 로그아웃 함수
+function fn_logout(){
+	//alert("fn_logout");
+	// 로그아웃 알림을 띄웁니다.
+	let ret = confirm("로그아웃 하시겠습니까?");
+	// 선택을 했을때
+	if(ret){
+	// 세션에서 mem_id를 지웁니다.	
+		sessionStorage.removeItem("mem_id");
+	// 알림	
+		alert("로그아웃 하였습니다. 로그인 페이지로 이동합니다.");
+	// 홈페이지로 이동되게 설정합니다.	
+		location.href ="/kartRace/homepagemain.do";
+	}else{
+	// 아니라면 로그아웃 알림을 띄워줍니다.		
+		alert("로그아웃을 취소하셨습니다.");		
+	}
+}// 로그아웃함수 종료
+
+</script>
+<!-- menu start -->
+<div id="top" class="intro">
+            <div class="hearder">
+                <div class="logoimg">
+					<!-- 로고 이미지 -->
+                    <img src="./images/brand.gif">
+                </div>
+				<!-- nav start -->
+                <ul class="nav">
+					<!-- 각페이지 이동 속성 -->
+                    <li><a href="./homepagemain.do">홈</a></li>
+                    <li><a href="#게시판">게시판</a></li>
+                    <li><a href="./board_map.do">오시는길</a></li>
+                    <li><a href="#예약">예약</a>
+                        <ul>
+                            <li><a href="#">양산</a></li>
+                            <li><a href="#">통영</a></li>
+                            <li><a href="#">부산</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="./board_list.do">공지사항</a></li>
+                    <div class="login">
+                    	<li><a href="./login.do">로그인</a></li>
+                    	</div>
+                    	<div class="join">
+                    	<li><a href="./join.do">회원가입</a></li>
+                    	</div>
+                </ul>
+				<!-- nav end -->
+             </div>
+        </div>
+		<!-- rolling image start -->
+        <div id="roll"></div>
+		<!-- rolling image end -->
+<!-- menu end -->

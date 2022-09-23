@@ -1,0 +1,113 @@
+*{
+    font-family: 'Noto Sans KR' , sans-serif;
+    list-style: none;
+    text-decoration: none;
+    margin: 0 auto;
+    padding: 0;
+    color: black;
+}
+.intro{
+    width:100%;
+    height: 100px;
+    /* background-color: lightblue;
+    background-color: red;*/
+}
+.header{
+    width: 100%;
+    height: 400px;
+    background-color: black;
+    display: flex;
+}
+.logoimg > img {
+    width: 100px;
+    height: 100px;
+    padding-bottom: 50px;
+    margin-left: 20px;
+     position: relative;
+    /* z-index: -2;  */
+}
+.logoimg{
+    /* text-align: left; */
+    float: left;
+    /* width: 300px; */
+    /* height: 300px; */
+}
+.nav{
+    /* float: left; */
+    display: flex;
+    padding-top: 30px;
+    /* padding-left: 10px; */
+} 
+.nav > li {
+    margin-left: 50px;
+}
+.nav > li > a {
+    color: lightgray;
+    font-weight: bold;
+    font-size: 30px;
+}
+.nav a:hover{
+    color : mediumblue; 
+}
+.nav li ul{
+    text-align: center;
+    display: none;
+    background: linear-gradient(
+        to bottom,
+        white,
+        white
+    );
+    border-radius: 20px;
+}
+.nav li:hover ul{
+    display: block;
+    animation: slidedown .3s linear;
+    animation-fill-mode: both;
+}
+@keyframes slidedown{
+    from{
+        opacity: 0;
+    }
+    to{
+        opacity: 1;
+    }
+}
+.nav a{
+    color: lightgray;
+    font-size: 20px;
+    margin-top: 5px;
+    font-weight: bold;
+}
+.login > li > a {
+    color: lightgray;
+    font-weight: bold;
+    font-size: 30px;
+}
+.join > li > a {
+    color: lightgray;
+    font-weight: bold;
+    font-size: 30px;
+}
+.intro{ 
+    background-color: transparent;
+}
+#roll{
+   background-color: red;
+   margin-top: 30px;
+   background-size: 100% 600px; 
+}
+#roll{
+    background-image: url("../images/5.jpg");
+    background-size: 100% 800px; 
+ }
+
+#roll{
+    width: 100%;
+    height: 800px;
+    /* background-color: tomato; */
+    display: flex;
+    position: relative;
+    /* z-index: -1; */
+    top: -50px;
+    background-size: 100% 800px;
+}

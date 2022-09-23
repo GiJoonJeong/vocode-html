@@ -1,0 +1,98 @@
+*{
+    margin: 0 auto;
+    padding:0;
+}
+body{
+    height: 1200px;
+    text-align: center;
+}
+.login_form{
+    position: relative;
+    top: 30%;
+    width: 600px;
+    height: 600px;
+    background-color: lavender;
+}
+.login_form > h1{
+    color :mediumblue;
+    font-size: 50px;
+    position: relative;
+    top: -80px;
+}
+.int-area{
+    width: 600px;
+    background-color: azure;
+    position: relative;
+}
+.int-area input{
+    color: white;
+    height: 30px;
+    width: 80%;
+    padding-top: 20px;
+    padding-left: 10px;
+    padding-bottom: 10px;
+    border:1px solid lightgray;
+    border-radius: 5px;
+    font-size: 20px;
+    display: flex;
+}
+.int-area input:focus{
+    border: 3px lightblue;
+}
+.int-area label{
+    font-size: 20px;
+    color: lightgray;    
+}
+.login_form label[for='mem_pw']{
+    position: absolute;
+    top: 10px;
+    left: 65px;
+    cursor: pointer;
+}
+.login_form label[for='mem_pw_check']{
+    position: absolute;
+    top: 10px;
+    left: 65px;
+    cursor: pointer;
+}
+.btn-area > button{
+    width:82%;
+    height: 50px;
+    margin-top: 30px;
+    border-radius: 5px;
+    font-size: 30px;
+    border: black;
+    color: white;
+    background-color: midnightblue;
+    cursor: pointer;
+}
+.idpwsearch_dl{
+    display: flex;
+    margin-top: 20px;
+}
+.idpwsearch_dl a{
+    color: lightgray;
+    text-decoration: none;
+}
+body,.login_form,.int-area{
+    background-color: transparent;
+}
+
+.int-area label{
+    transition: all 0.5s ease;
+}
+.int-area input[name='mem_pw']:valid{
+    font-size:25px;
+    color: black;
+}
+.int-area input[name='mem_pw_check']:valid{
+    font-size:25px;
+    color: black;
+}
+input:focus::-webkit-input-placeholder {
+  color: white;
+}
+
+.idpwsearch_dl a:active{
+    color:lightblue;
+}

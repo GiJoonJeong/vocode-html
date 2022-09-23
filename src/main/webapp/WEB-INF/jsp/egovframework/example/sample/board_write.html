@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">   
+<title>KartRace</title>
+<link rel="icon" type="image/logo" href="./images/brand.gif">
+<link rel="stylesheet" type="text/css" href="./css/header.css"/>
+<link rel="stylesheet" type="text/css" href="./css/home_boardWrite.css"/>
+<link rel="stylesheet" type="text/css" href="./css/footer.css"/>
+
+<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+<script>
+
+// 전역변수 선언
+let boardList_json;
+let temp_write_num;
+
+    $(function(){
+        //console.log(window.onload);
+        $("#page_footer").load("/kartRace/footer.do");
+        $("#page_header").load("/kartRace/header.do");
+         // 페이지 헤더랑 풋터를 페이지 로드 될때 바로 나타냅니다.
+		// 세션에서 temp_write_num 의 값을 변수 temp_write_num에 지정해줍니다. 
+    	temp_write_num = sessionStorage.getItem("temp_write_num");
+    	console.log("temp_write_num : ", temp_write_num);
+    	
+		// temp_write_num 가 비었거나 정의되지 않았거나 공백이 있지 않다면
+    	if(temp_write_num !== null && temp_write_num !== undefined && temp_write_num !== ""){
+			// 로컬에 있는 boardList의 값을 변수 boardList에 담아준다.
+    		let boardList = localStorage.getItem("boardList");
+    		
+			// JSON형식의 boardList의 값을 변수에 담아준다.
+    		boardList_json = JSON.parse(boardList);
+    		console.log("boardList_json : " , boardList_json);
+    		
+			// boardList_json을 반복하면서
+    		for (let i in boardList_json) {
+				// 세션에 있던 temp_write_num 의 값이 boardList[i]번째 write_num 의 값과 비교후
+				if(temp_write_num == boardList_json[i].write_num){
+					console.log("temp_write_num 와 write_num 동일합니다.");
+					
+					// 값을 지정해준다.
+					$("#notice_title").val(boardList_json[i].notice_title);
+					$("#notice_content").val(boardList_json[i].notice_content);
+					// checked의 값 속성을 추가해준다.
+					$("select[name='subject']").val(boardList_json[i].notice_subject).prop("checked", true);
+					
+					//$("input:radio[id='"+boardList_json[i].notice_job+"']").prop("checked", true);
+					
+					// 체크박스의 체크를 속성을 false로 추가해준다.
+					$("input:checkbox").prop("checked", false);
+					let arr_region = boardList_json[i].notice_region;
+					// arr_region 의 값을 반복하면서
+					for(let j in arr_region){
+						$("input:checkbox[id='"+arr_region[j]+"']").prop("checked", true);
+					}
+					//본인글이 아닌경우 수정, 삭제 버튼 숨기기
+					// 세션스토리지의 mem_id 를 변수 mem_id에 담아준다.
+					let mem_id = sessionStorage.getItem("mem_id");
+					console.log(boardList_json[i].mem_id);
+					console.log(mem_id);
+					// 세션의 mem_id 값과 게시글의 mem_id이 같지않다면
+					if(mem_id != boardList_json[i].mem_id){
+					// 수정 삭제 버튼을 숨긴다.	
+						$("#write_update").hide();
+						$("#write_delete").hide();
+					}
+				}
+			}
+    		// 현재 수정인 경우 이므로 등록버튼은 숨기기
+    		$("#write_insert").hide();
+    	}else{
+    		// 등록인 경우 이므로 수정버튼을 숨기기
+    		$("#write_update").hide();
+    		$("#write_delete").hide();
+    	}
+    	
+    	
+    });
+    
+// fn_submit 함수
+    function fn_submit(){
+        console.log(fn_submit);
+		// 로컬스토리지 write_num 의 값을 변수 write_num에 지정
+        let write_num = localStorage.getItem("write_num");
+		// write_num 의 값이 비어 있거나 정의 되지 않거나 공백이라면
+    	if(write_num=== null || write_num === undefined || write_num===""){
+    		write_num = 1;
+    	}else{
+    		write_num = parseInt(write_num) +1;
+    	}
+    	console.log("write_num : ",write_num);
+    	
+		// input 태그안에 입력한 선택자를 찾아 값을 변수에 담아준다.
+    	let notice_title = $("#notice_title").val();
+    	let notice_content = $("#notice_content").val();
+    	let notice_subject = $("#notice_subject").val();
+
+    	let notice_region = [];
+		// 변수 region 에 지역 체크된 항목을 넣는다.
+    	let region = $("input[name='region']:checked");
+		// 체크되어 있는지 반복하여 확인후 
+    	region.each(function(){
+		// 그 값을 넣어준다.	
+    		notice_region.push($(this).val());
+    	});
+    	console.log("notice_title", notice_title);
+    	console.log("notice_content", notice_content);
+    	console.log("notice_subject", notice_subject);
+    	console.log("notice_region", notice_region);
+    	
+    	// 작성자
+		// 세션스토리지에 있던 mem_id 의 값을 변수 mem_id 에 넣어준다.
+    	let mem_id = sessionStorage.getItem("mem_id");
+    	console.log("mem_id: ", mem_id);
+    	
+    	// 작성시간
+		// 시간의 특정 시간 설정
+    	let current_date = new Date();
+		// 나라의 표기방식에 맞는 숫자 날짜 세팅
+    	current_date  = current_date.toLocaleString();
+    	console.log("current_date : " , current_date);
+    	
+		// 배열 변수 선언
+    	let boardWrite = {};
+    	boardWrite.write_num = write_num;
+    	boardWrite.notice_title = notice_title;
+    	boardWrite.notice_content = notice_content;
+    	boardWrite.notice_subject = notice_subject;
+    	boardWrite.notice_region = notice_region;
+    	boardWrite.mem_id = mem_id;
+    	boardWrite.write_date = current_date;
+    	
+    	console.log("boardWrite : ", boardWrite);
+    	// 변수 boardArray에 localStorage의 boardList의 값의 내용을 넣어준다.
+    	let boardArray = localStorage.getItem("boardList");
+    	if(boardArray === null || boardArray === undefined || boardArray===""){
+    		boardArray = [];
+    	}else{
+			// JSON 형식의 데이터를 객체로 boardArray에 담아준다.
+    		boardArray = JSON.parse(boardArray);
+    	}
+		// boardArray에 boardWrite의 값을 넣어줍니다.
+    	boardArray.push(boardWrite);
+    	console.log("boardArray : ", boardArray);
+    	
+		// 객체의 값을 JSON 형식으로 변환하여 변수에 넣어줍니다.
+    	let boardList = JSON.stringify(boardArray);
+    	console.log("boardList : ", boardList);
+    	
+		// 로컬스토리지에 boardList , write_num 의 값을 세팅해줍니다.
+    	localStorage.setItem("boardList", boardList);
+    	localStorage.setItem("write_num", write_num);
+
+    	 
+    	alert("등록이 완료되었습니다.");
+		// 게시판으로 이동할수 있도록 합니다.
+    	location.href="/kartRace/board_list.do";
+    }
+    
+	// 게시글 수정 함수
+    function fn_write_update() {
+    	console.log("fn_write_update");
+		// 선택창 alert
+    	let ret = confirm("수정하시겠습니까?")
+		// 수정한다고 선택했을시 
+    	if(ret == true){
+    		console.log("수정진행");
+    		console.log("boardList_json : ", boardList_json);
+    		console.log("temp_write_num : ", temp_write_num);
+    		
+    		for(let i in boardList_json){
+			// temp_write_num 와 boardList_json 의 write_num가 같다면
+    			if(temp_write_num == boardList_json[i].write_num){
+    				console.log("temp_write_num 와 write_num가 동일합니다.");
+					// 값을 설정해줍니다.
+    				boardList_json[i].notice_title = $("#notice_title").val();
+    				boardList_json[i].notice_content = $("#notice_content").val();
+    				boardList_json[i].notice_subject = $("#notice_subject").val();
+    				
+    				let arr_region = [];
+    				let update_region = $("input:checkbox[name='region']:checked");
+					// 선택된 값들을 빈 배열 arr_region 에 넣어줍니다.
+    				update_region.each(function(){
+    					arr_region.push($(this).val());
+    				});
+    				boardList_json[i].notice_region = arr_region;
+    			}
+    		}
+			// boardList_json의 값을 JSON형식으로 변수 boardList에 지정해줍니다.
+    		let boardList = JSON.stringify(boardList_json);
+			// 로컬스토리지에 boardList에 변수 boardList의 값을 세팅해줍니다.
+    		localStorage.setItem("boardList", boardList);
+			// 수정이 완료되면 temp_write_num를 세션스토리지에서 삭제해줍니다.
+    		sessionStorage.removeItem("temp_write_num");
+    		alert("수정이 완료되었습니다.");
+    	}else{
+    		alert("취소하셨습니다.");
+    	}
+		// 게시판으로 이동시켜줍니다.
+    		location.href="/kartRace/board_list.do";
+    } // 게시글 수정 함수 종료
+    
+	// 게시글 삭제 함수
+    function fn_write_delete(){
+    	console.log("fn_write_delete");
+    	let ret = confirm("삭제하시겠습니까?");
+		// 삭제한다고 선택했을시 
+    	if(ret ==true){
+    		console.log("temp_write_num : ", temp_write_num);
+    		console.log("boardList_json : ", boardList_json);
+    		
+    		for(let i in boardList_json){
+				// temp_write_num 와 boardList_json 의 write_num가 같다면
+    			if(temp_write_num == boardList_json[i].write_num){
+    				console.log("temp_write_num 와 write_num 동일합니다.");
+					// 변수 mem_id 에 sessionStorage에 mem_id 의 값을 지정해줍니다.
+    				let mem_id = sessionStorage.getItem("mem_id");
+					// 만약 값이 같다면
+    				if(mem_id == boardList_json[i].mem_id){
+					// boardList_json 의 값을 하나 없애줍니다.	
+    					boardList_json.splice(i, 1);
+    				}else{
+    					alert("해당 작성자만 삭제 가능합니다.");
+    					return;
+    				}
+    			}
+    		}
+    		let boardList  = JSON.stringify(boardList_json);
+			// 로컬스토리지에 boardList에 변수 boardList의 값을 세팅해줍니다.
+    		localStorage.setItem("boardList", boardList);
+			// 삭제가 완료되면 temp_write_num를 세션스토리지에서 삭제해줍니다.
+    		sessionStorage.removeItem("temp_write_num");
+    		alert("삭제되었습니다.");
+			// 게시판으로 이동시켜줍니다.
+    		location.href="/kartRace/board_list.do";
+    		
+    	}else {
+    		alert("취소하셨습니다.");
+    	}
+    } // 게시글 삭제 함수 종료
+
+</script>
+
+</head>
+<!-- html 화면 시작 -->
+<body>
+	<!-- wrap으로 감싸줍니다. -->
+    <div id="wrap">
+		<!-- header 페이지 호출 -->
+        <header id="page_header">
+	
+	</header>
+
+        <div class="contents">
+            <div class="content01">
+                <div class="content01_h1">
+                    <h1>공지사항</h1>
+                </div>
+				<!-- 폼태그 시작 -->
+                <form action="" id="editor_form" method="post">
+                    <div id="div_table">
+						<!-- 테이블 시작 -->
+                        <table>
+							<!-- 서식지정을 위해 열을 그룹으로 묶어줍니다. -->
+                            <colgroup>
+								<!-- 컬럼의 길이를 지정해줍니다. -->
+                                <col width="200">
+                                <col width="400">
+                            </colgroup>
+                            <tr>
+                                <td class="td_left">제목</td>
+                                <td class="td_right">
+									<!-- 최대 문자열 길이 설정 -->
+                                    <input type="text" id="notice_title" maxlength="30" value="">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="td_left">내용</td>
+                                <td class="td_right">
+									<!-- 30자 제한 10줄 설정 -->
+                                    <textarea name="notice_content" id="notice_content" cols="30" rows="10"></textarea>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="td_left">말머리</td>
+                                <td class="td_right">
+									<!-- select 태그 시작 -->
+                                    <select name="notice_subject" id="notice_subject">
+										<!-- 기본적으로 선택되있도록 설정 -->
+                                        <option value="공지" selected>공지</option>
+                                        <option value="이벤트" selected>이벤트</option>
+                                    </select>
+									<!-- select 태그 종료 -->
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="td_left">카트장 지역</td>
+                                <td class="td_right">
+									<!-- 라벨들로 안에 내용들 감싸줍니다. -->
+									<!-- 서울을 기본적으로 check 설정 나머지는 체크하지 않음 -->
+                                    <label for="Seoul">
+                                        <input type="checkbox" name="region" id="Seoul" value="Seoul"
+                                            checked>서울&nbsp;&nbsp;&nbsp;
+                                    </label>
+                                    <label for="Daejeon">
+                                        <input type="checkbox" name="region" id="Daejeon"
+                                            value="Daejeon">대전&nbsp;&nbsp;&nbsp;
+                                    </label>
+                                    <label for="Gwangju">
+                                        <input type="checkbox" name="region" id="Gwangju"
+                                            value="Gwangju">광주&nbsp;&nbsp;&nbsp;
+                                    </label>
+                                    <label for="Ulsan">
+                                        <input type="checkbox" name="region" id="Ulsan"
+                                            value="Ulsan">울산&nbsp;&nbsp;&nbsp;
+                                    </label>
+                                    <label for="Pohang">
+                                        <input type="checkbox" name="region" id="Pohang"
+                                            value="Pohang">포항&nbsp;&nbsp;&nbsp;
+                                    </label>
+                                    <label for="Busan">
+                                        <input type="checkbox" name="region" id="Busan"
+                                            value="Busan">부산&nbsp;&nbsp;&nbsp;
+                                    </label>
+                                    <label for="Incheon">
+                                        <input type="checkbox" name="region" id="Incheon"
+                                            value="Incheon">인천&nbsp;&nbsp;&nbsp;
+                                    </label>
+                                    <label for="Daegu">
+                                        <input type="checkbox" name="region" id="Daegu"
+                                            value="Daegu">대구&nbsp;&nbsp;&nbsp;
+                                    </label>
+                                </td>
+                        </table>
+						<!-- 테이블 종료 -->
+                    </div>
+                    <!-- 버튼 -->
+                    <div id="file_button">
+						<!-- 파일 올릴수 있는 버튼 생성  -->
+                        <input type="file" name="SelectFile" />
+                    </div>
+					<!-- 버튼 생성 -->
+                    <div id="div_button">
+						<!-- 게시판화면으로 이동하는 클릭이벤트 생성 -->
+                        <input type="button" value="목록" onclick="location.href='/kartRace/board_list.do'">
+						<!-- 등록버튼 누르면 fn_submit 함수 실행 -->
+                        <input type="button" value="등록" id="write_insert" onclick="javascript:fn_submit()">
+						<!-- 수정버튼 누르면 fn_write_update 함수 실행 -->
+                        <input type="button" value="수정" id="write_update" onclick="fn_write_update()">
+						<!-- 삭제버튼 누르면 fn_delete_update 함수 실행 -->
+                        <input type="button" value="삭제" id="write_delete" onclick="fn_write_delete()">
+                    </div>
+
+                </form>
+				<!-- 폼태그 종료 -->
+            </div>
+        </div>
+
+
+
+
+<!-- footer 페이지 호출 -->
+        <footer id="page_footer">
+            <!-- footer -->
+        </footer>
+
+    </div>
+</body>
+<!-- html 화면 종료 -->
+</html>

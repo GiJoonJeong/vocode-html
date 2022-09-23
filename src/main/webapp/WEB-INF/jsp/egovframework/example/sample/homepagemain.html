@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>KartRace</title>
+<link rel="icon" type="image/logo" href="./images/brand.gif">
+<link rel="stylesheet" type="text/css" href="./css/homepage_main.css">
+<link rel="stylesheet" type="text/css" href="./css/footer.css">
+
+
+<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+
+
+
+    <script>
+        window.onload = function () {
+        	$("#page_footer").load("/kartRace/footer.do");
+
+            // 로그인 li 태그 삭제
+            $('.login li').remove();
+
+            // 변수 mem_id 에 sessionStorage에 있는 mem_id 지정
+            let mem_id = sessionStorage.getItem("mem_id");
+            console.log(mem_id);
+            // mem_id 가 없거나 정의되지 않거나 빈값일때
+            if(mem_id === null || mem_id === undefined || mem_id === ("")){
+            	// div class login에 li 태그 속성을 넣어줍니다.
+            	$('.login').append("<li><a href='./login.do'>로그인</a></li>");
+            }else{
+            	// mem_id 가 있거나 정의되지 있거나 빈값이 아닐때
+	            // div class login 위치에 로그아웃 li 태그 속성을 넣어줍니다.
+            	$('.login').append("<li><a href='javascript:fn_logout()'>로그아웃</a></li>");
+                }
+
+            // 회원가입 li 태그 삭제
+            $('.join li').remove();
+
+            // 만약 로그인 되어있지 않는 상태라면
+            if(mem_id === null || mem_id === undefined || mem_id === ("")){
+
+                // 회원가입 li 태그를 넣어줍니다.
+            	$('.join').append("<li><a href='./join.do'>회원가입</a></li>");
+                // 로그인 되어있는 상태라면 
+            }else{
+                // 회원정보수정 li 태그를 넣어줍니다.
+            	$('.join').append("<li><a href='./update.do'>회원정보수정</a></li>");
+                }
+
+            // roll img 배열
+            let imgs = [
+                "./images/2.jpg",
+                "./images/3.jpg",
+                "./images/4.jpg"
+            ];
+            
+           let div_img = document.getElementById("roll");
+           // img rolling end
+            
+           let i = 0;
+            // 배경 이미지 설정
+            function fn_change_img() {
+                console.log("fn_change_img");
+                div_img.style.backgroundImage = "url(" + imgs[i] + ")"
+                if (i == 2) {
+                    i = 0;
+                } else {
+                    i++;
+                }
+                // 스타일 변경 시간
+                div_img.style.transitionDuration = "2s";
+            }
+            // 4초마다 변경되도록 설정
+            setInterval(function () {
+                fn_change_img();
+            }, 4000);
+
+            // 영상 설정
+        let iframe = "";
+        iframe += "<iframe width='560' height='315' src='https://www.youtube.com/embed/8FZLGBT7HQ0' title='YouTube video player' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'allowfullscreen></iframe>";
+        iframe += "<iframe width='560' height='315' src='https://www.youtube.com/embed/F40ImMZUGd0' title='YouTube video player' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen></iframe>";
+        iframe += "<iframe width='560' height='315' src='https://www.youtube.com/embed/wco_vIMHptA' title='YouTube video player' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen></iframe>";
+        // div class youtube에 유튜브 영상 삽입
+        $(".youtube").append(iframe);
+    } 
+
+        // 로그아웃 함수
+        function fn_logout(){
+        	//alert("fn_logout");
+        	let ret = confirm("로그아웃 하시겠습니까?");
+        	if(ret){
+        		sessionStorage.removeItem("mem_id");
+        		alert("로그아웃 하였습니다.");
+                // 로그아웃시 홈페이지메인으로 이동시킵니다.
+        		location.href ="/kartRace/homepagemain.do";
+        	}else{
+        		alert("로그아웃을 취소하셨습니다.");		
+        	}
+        }
+        // 로그아웃 함수 끝
+    </script>
+
+
+</head>
+
+
+
+<body>
+    <div id="wrap">
+        <!-- menu start -->
+       <div id="top" class="intro">
+            <div class="hearder">
+                <div class="logoimg">
+                    <!-- 로고 이미지 -->
+                    <img src="./images/brand.gif">
+                </div>
+                <!-- nav start -->
+                <ul class="nav">
+                    <!-- 각페이지 이동 속성 -->
+                    <li><a href="./homepagemain.do">홈</a></li>
+                    <li><a href="#게시판">게시판</a></li>
+                    <li><a href="./board_map.do">오시는길</a></li>
+                    <li><a href="#예약">예약</a>
+                        <ul>
+                            <li><a href="#">양산</a></li>
+                            <li><a href="#">통영</a></li>
+                            <li><a href="#">부산</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="./board_list.do">공지사항</a></li>
+                    <div class="login">
+                    
+                    <li><a href="./login.do">로그인</a></li>
+                    	</div>
+                    	<div class="join">
+                    	<li><a href="./join.do">회원가입</a></li>
+                    	</div>
+                </ul>
+                <!-- nav end -->
+             </div>
+        </div>
+        <!-- rolling image start -->
+       <div id="roll"></div>
+        <!-- rolling image end -->
+
+             <!-- 반응형 추가 s -->
+
+        <input type="checkbox" id="menuicon">
+        <!-- 3줄 선 그리기 -->
+        <label for="menuicon">
+            <span></span>
+            <span></span>
+            <span></span>
+
+        </label>
+
+        <!-- header_icon start -->
+        <div class="header_icon">
+            <ul class="menu">
+                <li><a href="./homepagemain.do">홈</a></li>
+                <li><a href="#게시판">게시판</a></li>
+                <li><a href="./board_map.do">오시는길</a></li>
+                <li><a href="#예약">예약</a></li>
+                <li><a href="./board_list.do">공지</a></li>
+            </ul>
+        </div>
+        <!-- header_icon end -->
+
+        <!-- sub_title start -->
+        <div class="sub_title_div">
+            <ul class="sub_title">
+                <li>
+                    <div class="icon_img">
+                        <!-- 날씨 api 게시판으로 이동 -->
+                       <a href="./board_Nationwide.do"><img src="./images/content.png"></a>
+                    </div>
+                    <div class="contents1_bold">
+                        <!-- 날씨 api 게시판으로 이동 -->
+                    <p><a href="./board_Nationwide.do">NationWide</a></p>
+                    </div>
+                </li>
+                <li>
+                    <div class="icon_img">
+                        <!-- 지도 페이지로 이동 -->
+                        <a href="./board_map.do"><img src="./images/map.png" ></a>
+                    </div>
+                    <div class="contents1_bold">
+                        <!-- 지도 페이지로 이동 -->
+                    <p><a href="./board_map.do">Directions </a></p>
+                    
+                    </div>
+                </li>
+                <li>
+                    <div class="icon_img">
+                       <a href="#"><img src="./images/reserved.png"></a>
+                    </div>
+                    <div class="contents1_bold">
+                    <p>Reserved</p>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div class="howtousekart">
+            <h1 class="howtouse">회원탑승영상</h1>
+            <li>
+                <div class="youtube">
+                    <!-- youtube 영역 설정 -->
+                </div>
+            </li>
+        </div>
+        <!-- sub_title_div end -->
+
+        <div class="noticetext">
+
+            <div class="notice">
+                <h1 id="notice">공지사항</h1>
+                <div>
+                    <img src="./images/notice.png" alt="notice" />
+                    <!-- 공지사항 이미지 글씨 클릭시 공지사항으로 이동시킵니다. -->
+                    <li><a href="./board_list.do">공지사항 더보기</a></li>
+
+                </div>
+
+
+            </div>
+            <div class="notice0">
+                <div>
+                    <!-- 텍스트 클릭시 공지사항으로 이동 시킵니다. -->
+                    <h1 class="notice1"><a href="./board_list.do">상시 채용 공고</h1>
+                    <p> KartRace 와 함께할 직원을 상시 모집합니다.
+                        <br>
+                        - 1~3개월, 기간별 가능(주 5일)
+                        <br>
+                        - 기숙사 운영
+                        <br>
+                        (기숙사비 100,000원_기타공과금 별도)
+                        <br>
+                        - 이메일 지원 <kijoon2008@gmail.com>
+                            <br>
+                            → 이메일 지원 시 확인하여 연락드립니다.
+                            <br>
+                            [ 지원 시 작성내용 ]
+                            <br>
+                            - 이력서 첨부
+                            <br>
+                            - 이름, 나이, 연락처
+                            <br>
+                            - 희망근무기간(월)
+                            <br>
+                            - 지원분야 (카트운영/서바이벌 운영/카페 바리스타)
+                            </a>
+                    </p>
+                </div>
+                <div>
+                    <h1 class="notice2"><a href="./board_list.do">우천시 카트 탑승</h1>
+                    <p>* 우천시 주의사항
+                        <br>
+                        1. 얼굴에 물이 튀거나 옷이 젖을 수 있습니다.
+                        <br>
+                        → 빗물이나 바닥에 고인 물이 타이어에 의해 젖을 수 있습니다.
+                        <br>
+                        2. 도로가 미끄럽습니다.
+                        <br>
+                        → 제동거리가 길어져 차량간격은 15m 이상 유지해야 합니다.
+                        <br>
+                        3. 과속 절대 금지
+                        <br>
+                        → 정지 시 카트가 드리프트 될 수 있어 사고위험이 높습니다.
+                        <br>
+                        4. 핸드폰 사용 금지
+                        <br>
+                        → 한손운전은 위험하니, 두손으로 꼭 핸들을 잡고 이용부탁드립니다.
+                        <br>
+                        * 우천시 즐기는 법
+                        <br>
+                        - 한산한 카트 트랙으로 여유로운 운행이 가능합니다.
+                        <br>
+                        - 바람과 함께 스트레스를 풀어보세요!
+                        <br>
+                        - 시원한 빗줄기로 생각비우기도 가능!
+                        <br>
+                        - 연인, 가족, 친구와 함께 추억을 쌓아보세요
+                        <br>
+                        - 날리는 비에 체감속도가 높아 속도감을 즐겨보세요:)
+                        </a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- notice text end -->
+
+
+    <footer id="page_footer">
+        <!-- footer 영역 -->
+    </footer>
+
+</body>
+
+</html>

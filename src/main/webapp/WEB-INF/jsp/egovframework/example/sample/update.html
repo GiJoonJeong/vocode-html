@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ko">    
+    <head>
+     <meta charset="UTF-8"/>
+        <title>KartRace</title>
+        <link rel="icon" type="image/logo" href="./images/brand.gif">
+        <link rel="stylesheet" type="text/css" href="./css/update.css">
+    <script  src="http://code.jquery.com/jquery-latest.min.js"></script>
+
+<script>
+let mem_id = sessionStorage.getItem("mem_id");
+console.log("mem_id::"+mem_id);
+let memberList = localStorage.getItem("memberList");
+console.log("memberList::::"+memberList);
+// JSON 형식의 데이터를 객체로 변환
+let mem_arr = JSON.parse(memberList);
+console.log(mem_arr.length);
+// mem_arr 길이만큼 반복하면서 
+for(let i=0; i<mem_arr.length; i++){
+	if(mem_arr[i].mem_id == mem_id && mem_arr[i].mem_pw == mem_id ){
+		//alert("비밀번호를 변경하셔야 합니다.");
+		//$("#modal_div1").show();	
+	}
+}
+function fn_change(){
+	// mem_pw 의 값의 공백을 없애줍니다.
+	let mem_pw = $("#mem_pw").val().trim();
+	// mem_pw 길이가 4글자 보다 짧다면
+ 	if(mem_pw.length<4){
+		alert("PASSWORD가 너무 짧습니다. 4글자 이상 입력해 주세요");
+		// 값을 공백으로 만들어줍니다.
+		$("#mem_pw").val("");
+		return;	
+	}
+	let mem_pw_check = $("#mem_pw_check").val();
+	// mem_pw 와 mem_pw_check 의 값이 다르다면
+    if(mem_pw != mem_pw_check){
+		// 값을 공백으로 만들어줍니다.
+    	$("#mem_pw_check").val("");
+    	alert("입력하신 비밀번호와 재확인 비밀번호가 틀립니다.");
+    	return;
+    }
+    let mem_id = sessionStorage.getItem("mem_id");
+    console.log("mem_id::"+mem_id);
+    let memberList = localStorage.getItem("memberList");
+    console.log("memberList::::"+memberList);
+    let mem_arr = JSON.parse(memberList);
+    console.log(mem_arr.length);
+
+    for(let i=0; i<mem_arr.length; i++){
+   		console.log(mem_arr[i].mem_id+" , "+mem_id+" , "+mem_arr[i].mem_pw+" , "+mem_pw);
+    	if(mem_arr[i].mem_id == mem_id){
+    		if(mem_arr[i].mem_pw != mem_pw){
+    			mem_arr[i].mem_pw = mem_pw;
+    		}else{
+    			alert("기존 비밀번호와 같습니다. 다시 입력해주세요");
+    			document.loginForm.reset();
+    			return false;
+
+    		}
+    	}
+    }
+	memberList = JSON.stringify(mem_arr);
+	// localStorage에 meberList 에 변환된 memberList 의 값을 넣어줍니다. 
+    localStorage.setItem("memberList", memberList);
+    alert("비밀번호 변경이 완료 되었습니다.");
+	// 로그인페이지로 이동시킵니다.
+    location.href="/kartRace/login.do"
+}
+
+function fn_delete(){
+	console.log("fn_delete");
+	// 회원 탈퇴 선택시
+	let ret = confirm("정말 회원탈퇴하시겠습니까?");
+	if(ret){
+		console.log(ret);
+		// JSON 형태 데이터를 객체형식으로 변환합니다.
+		let member = JSON.parse(memberList);
+		for(let i=0; i<member.length; i++){
+				let mem_id = sessionStorage.getItem("mem_id");
+				if(member[i].mem_id == mem_id){
+					member.splice(i, 1);
+		// localStorage 에 mem_id를 삭제 시킵니다.					
+		localStorage.removeItem("mem_id");
+				}
+		}			// 객체의 값을 JSON 형식으로 변환합니다.
+					member = JSON.stringify(member);
+					// localStorage에 memberList에 변수 member의 값을 설정 합니다.
+					localStorage.setItem("memberList" , member);
+					// sessionStorage에 mem_id를 삭제 시킵니다.
+					sessionStorage.removeItem("mem_id");
+		alert("회원탈퇴 되었습니다.");
+		// 탈퇴 시 로그인페이지로 이동 시킵니다.
+		location.href="/kartRace/login.do";
+	}else {
+		// 아니라면 취소 알림 표시
+		alert("취소하셨습니다.");
+	}
+}
+</script>
+</head>
+
+
+<body>
+	<!-- section start -->
+<section class="login_form">
+	  <h1>kartRace</h1> 
+	  <!-- form start -->
+ <form name="loginForm" action="">
+      <div class="int-area">
+		  <!-- input type password로 비밀번호 안보이게 설정 -->
+		  <!-- 자동완성 안되게 필수 입력하게 설정 -->
+          <input type="password" id="mem_pw" name="mem_pw" value="" placeholder="비밀번호" autocomplete="off" required>
+      </div>
+      <div class="int-area">
+          <input type="password" id="mem_pw_check" name="mem_pw_check" placeholder="비밀번호 확인" autocomplete="off" required>
+      </div>
+      <div class="btn-area">
+		  <!-- 버튼을 누르면 회원정보 함수 실행 -->
+          <button type="button" id="btn_id" name="btn_id" onclick="fn_change()">회원정보 수정</button>
+      </div>
+      <div class="btn-area">
+		  <!-- 버튼을 누르면 회원탈퇴 함수 실행 -->
+      		<button type="button" id="delete_member" name="delete_member" onclick="fn_delete()">회원 탈퇴</button>
+      </div>
+  </form>
+  <!-- form end -->
+  </section>
+  <!-- section end -->
+</body>
+<!-- body end -->
+</html>
